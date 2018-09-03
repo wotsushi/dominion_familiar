@@ -1,44 +1,19 @@
 <template>
   <v-ons-page>
     <v-ons-toolbar class="home-toolbar">
-      <div class="left">
-        <v-ons-toolbar-button @click="$store.commit('splitter/toggle')">
-          <v-ons-icon icon="fa-bars"></v-ons-icon>
-        </v-ons-toolbar-button>
-      </div>
       <div class="center">{{ msg }}</div>
     </v-ons-toolbar>
 
-    <div class="header">
-      <img src="../assets/logo.png" alt="vue-logo">
-    </div>
-
-    <v-ons-list-title>Vue.js Essential Links</v-ons-list-title>
+    <v-ons-list-title>Supplies</v-ons-list-title>
     <v-ons-list>
-      <v-ons-list-item v-for="item in essentialLinks" @click="goTo(item.link)" :key="item.link">
-        <div class="left"><v-ons-icon fixed-width :icon="item.icon"></v-ons-icon></div>
-        <div class="center">{{ item.label }}</div>
-        <div class="right"><v-ons-icon icon="fa-external-link"></v-ons-icon></div>
+      <v-ons-list-item v-for="supply in supplies" :key="supply.name">
+        <div class="left">{{ supply.name }}</div>
+        <div class="center">{{ supply.set }}</div>
+        <div class="right">{{ supply.cost }}</div>
       </v-ons-list-item>
     </v-ons-list>
 
-    <v-ons-list-title>Vue.js Ecosystem</v-ons-list-title>
-    <v-ons-row>
-      <v-ons-col>
-        <v-ons-card @click="goTo('http://router.vuejs.org/')">vue-router</v-ons-card>
-      </v-ons-col>
-      <v-ons-col>
-        <v-ons-card @click="goTo('http://vuex.vuejs.org/')">vuex</v-ons-card>
-      </v-ons-col>
-    </v-ons-row>
-    <v-ons-row>
-      <v-ons-col>
-        <v-ons-card @click="goTo('http://vue-loader.vuejs.org/')">vue-loader</v-ons-card>
-      </v-ons-col>
-      <v-ons-col>
-        <v-ons-card @click="goTo('https://github.com/vuejs/awesome-vue')">awesome-vue</v-ons-card>
-      </v-ons-col>
-    </v-ons-row>
+    <v-ons-button @click="makeSupplies()">Make Supplies</v-ons-button>
 
   </v-ons-page>
 </template>
@@ -48,41 +23,90 @@ export default {
   name: 'home',
   data () {
     return {
-      msg: 'Welcome',
-      essentialLinks: [
+      msg: 'Dominion Familiar',
+      supplies: [],
+      cardpool: [
         {
-          label: 'Core Docs',
-          link: 'https://vuejs.org',
-          icon: 'fa-book'
+          name: '地下貯蔵庫',
+          set: '基本',
+          cost: 2
         },
         {
-          label: 'Community Chat',
-          link: 'https://chat.vuejs.org',
-          icon: 'fa-commenting'
+          name: '礼拝堂',
+          set: '基本',
+          cost: 2
         },
         {
-          label: 'Forum',
-          link: 'https://forum.vuejs.org',
-          icon: 'fa-comments'
+          name: '堀',
+          set: '基本',
+          cost: 2
         },
         {
-          label: 'Twitter',
-          link: 'https://twitter.com/vuejs',
-          icon: 'fa-twitter'
+          name: '家臣',
+          set: '基本',
+          cost: 3
         },
         {
-          label: 'Docs for this template',
-          link: 'http://vuejs-templates.github.io/webpack/',
-          icon: 'fa-file-text'
+          name: '鍛冶屋',
+          set: '基本',
+          cost: 4
+        },
+        {
+          name: '研究所',
+          set: '基本',
+          cost: 5
+        },
+        {
+          name: '山賊',
+          set: '基本',
+          cost: 5
+        },
+        {
+          name: '魔女',
+          set: '基本',
+          cost: 5
+        },
+        {
+          name: '倒壊',
+          set: '冒険',
+          cost: 2
+        },
+        {
+          name: '地下牢',
+          set: '冒険',
+          cost: 3
+        },
+        {
+          name: 'カササギ',
+          set: '冒険',
+          cost: 4
+        },
+        {
+          name: '守銭奴',
+          set: '冒険',
+          cost: 4
+        },
+        {
+          name: '沼の妖婆',
+          set: '冒険',
+          cost: 5
+        },
+        {
+          name: 'ワイン商',
+          set: '冒険',
+          cost: 5
+        },
+        {
+          name: '雇人',
+          set: '冒険',
+          cost: 6
         }
       ]
     }
   },
   methods: {
-    goTo (url) {
-      const newWindow = window.open(url, '_blank')
-      newWindow.opener = null
-      newWindow.location = url
+    makeSupplies () {
+      this.supplies = this._.sortBy(this._.sampleSize(this.cardpool, 10), ['cost'])
     }
   }
 }

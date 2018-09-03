@@ -11,6 +11,10 @@ import * as VOns from './vue-onsen-components'
 import store from './store'
 import App from './App'
 
+import VueLodash from 'vue-lodash'
+const options = { name: '_' }
+Vue.use(VueLodash, options)
+
 Vue.config.productionTip = false
 
 Vue.use($ons)
