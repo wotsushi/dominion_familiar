@@ -19,89 +19,15 @@
 </template>
 
 <script>
+import cards from '../assets/cards.json'
+
 export default {
   name: 'home',
   data () {
     return {
       msg: 'Dominion Familiar',
       supplies: [],
-      cardpool: [
-        {
-          name: '地下貯蔵庫',
-          set: '基本',
-          cost: 2
-        },
-        {
-          name: '礼拝堂',
-          set: '基本',
-          cost: 2
-        },
-        {
-          name: '堀',
-          set: '基本',
-          cost: 2
-        },
-        {
-          name: '家臣',
-          set: '基本',
-          cost: 3
-        },
-        {
-          name: '鍛冶屋',
-          set: '基本',
-          cost: 4
-        },
-        {
-          name: '研究所',
-          set: '基本',
-          cost: 5
-        },
-        {
-          name: '山賊',
-          set: '基本',
-          cost: 5
-        },
-        {
-          name: '魔女',
-          set: '基本',
-          cost: 5
-        },
-        {
-          name: '倒壊',
-          set: '冒険',
-          cost: 2
-        },
-        {
-          name: '地下牢',
-          set: '冒険',
-          cost: 3
-        },
-        {
-          name: 'カササギ',
-          set: '冒険',
-          cost: 4
-        },
-        {
-          name: '守銭奴',
-          set: '冒険',
-          cost: 4
-        },
-        {
-          name: '沼の妖婆',
-          set: '冒険',
-          cost: 5
-        },
-        {
-          name: 'ワイン商',
-          set: '冒険',
-          cost: 5
-        },
-        {
-          name: '雇人',
-          set: '冒険',
-          cost: 6
-        }
-      ]
+      cardpool: cards
     }
   },
   methods: {
