@@ -1,38 +1,16 @@
 <template>
-  <v-ons-page>
-    <v-ons-toolbar class="home-toolbar">
-      <div class="center">{{ msg }}</div>
-    </v-ons-toolbar>
-
-    <v-ons-list-title>Supplies</v-ons-list-title>
-    <v-ons-list>
-      <v-ons-list-item v-for="supply in supplies" :key="supply.name">
-        <div class="left">{{ supply.name }}</div>
-        <div class="center">{{ supply.set }}</div>
-        <div class="right">{{ supply.cost }}</div>
-      </v-ons-list-item>
-    </v-ons-list>
-
-    <v-ons-button @click="makeSupplies()">Make Supplies</v-ons-button>
-
-  </v-ons-page>
+  <v-ons-navigator swipeable :page-stack="pageStack" @push-page="pageStack.push($event)">
+  </v-ons-navigator>
 </template>
 
 <script>
-import cards from '../assets/cards.json'
+import pick from './PickPage'
 
 export default {
   name: 'home',
   data () {
     return {
-      msg: 'Dominion Familiar',
-      supplies: [],
-      cardpool: cards
-    }
-  },
-  methods: {
-    makeSupplies () {
-      this.supplies = this._.sortBy(this._.sampleSize(this.cardpool, 10), ['cost'])
+      pageStack: [pick]
     }
   }
 }
