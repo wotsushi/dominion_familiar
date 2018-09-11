@@ -1,5 +1,5 @@
 <template>
-  <v-ons-navigator swipeable :page-stack="pageStack" @push-page="pageStack.push($event)">
+  <v-ons-navigator swipeable :page-stack="pageStack" @push-page="pageStack.push($event)" @pop-page="pageStack.pop()">
   </v-ons-navigator>
 </template>
 

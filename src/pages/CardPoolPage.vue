@@ -2,7 +2,7 @@
   <v-ons-page>
     <v-ons-toolbar class="home-toolbar">
       <div class="left">
-        <v-ons-back-button>Back</v-ons-back-button>
+        <v-ons-back-button @click="pop">Back</v-ons-back-button>
       </div>
       <div class="center">{{ msg }}</div>
     </v-ons-toolbar>
@@ -28,6 +28,12 @@ export default {
   data () {
     return {
       msg: 'Configuration of Card Pool'
+    }
+  },
+  methods: {
+    pop () {
+      localStorage.cardsets = JSON.stringify(this.cardsets)
+      this.$emit('pop-page')
     }
   },
   computed: {

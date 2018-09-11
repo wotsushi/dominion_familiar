@@ -3,6 +3,19 @@ import Vuex from 'vuex'
 import _ from 'lodash'
 import cards from './assets/cards.json'
 
+if (!localStorage.getItem('cardsets')) {
+  localStorage.cardsets = JSON.stringify(
+    _(cards)
+      .map(card => card.set)
+      .uniq()
+      .map(cardset => ({
+        name: cardset,
+        isUsed: true
+      }))
+      .value()
+  )
+}
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -11,14 +24,7 @@ export default new Vuex.Store({
       namespaced: true,
       state: {
         cards: cards,
-        cardsets: _(cards)
-          .map(card => card.set)
-          .uniq()
-          .map(cardset => ({
-            name: cardset,
-            isUsed: true
-          }))
-          .value()
+        cardsets: JSON.parse(localStorage.cardsets)
       },
       mutations: {
       },
