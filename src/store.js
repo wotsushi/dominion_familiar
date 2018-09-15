@@ -36,6 +36,28 @@ export default new Vuex.Store({
           .map(cardset => cardset.name)
           .value()
       }
+    },
+    players: {
+      namespaced: true,
+      state: {
+        players: [
+          {
+            name: 'A'
+          },
+          {
+            name: 'B'
+          },
+          {
+            name: 'C'
+          },
+          {
+            name: 'D'
+          }
+        ]
+      },
+      getters: {
+        players: state => state.players
+      }
     }
   }
 })

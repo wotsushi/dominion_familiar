@@ -8,7 +8,7 @@
         </v-ons-toolbar-button>
       </div>
     </v-ons-toolbar>
-
+    <v-ons-button @click="startNewGame()">New Game</v-ons-button>
     <v-ons-list-title>Supplies</v-ons-list-title>
     <v-ons-list>
       <v-ons-list-item v-for="supply in supplies" :key="supply.name">
@@ -17,9 +17,12 @@
         <div class="right">{{ supply.cost }}</div>
       </v-ons-list-item>
     </v-ons-list>
-
-    <v-ons-button @click="makeSupplies()">Make Supplies</v-ons-button>
-
+    <v-ons-list-title>Players</v-ons-list-title>
+    <v-ons-list>
+      <v-ons-list-item v-for="player in players" :key="player.name">
+        <div class="center">{{ player.name }}</div>
+      </v-ons-list-item>
+    </v-ons-list>
   </v-ons-page>
 </template>
 
@@ -33,16 +36,18 @@ export default {
   data () {
     return {
       msg: 'Dominion Familiar',
-      supplies: []
+      supplies: [],
+      players: []
     }
   },
   methods: {
-    makeSupplies () {
+    startNewGame () {
       this.supplies = _(this.cards)
         .filter(card => _.includes(this.cardsets, card.set))
         .sampleSize(10)
         .sortBy(['cost'])
         .value()
+      this.players = _.shuffle(this.registeredPlayers)
     },
     configureCardPool () {
       this.$emit('push-page', cardPool)
@@ -54,6 +59,9 @@ export default {
     },
     cardsets () {
       return this.$store.getters['cardpool/usedCardsets']
+    },
+    registeredPlayers () {
+      return this.$store.getters['players/players']
     }
   }
 
