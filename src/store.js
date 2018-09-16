@@ -15,6 +15,9 @@ if (!localStorage.getItem('cardsets')) {
       .value()
   )
 }
+if (!localStorage.getItem('players')) {
+  localStorage.players = JSON.stringify([])
+}
 
 Vue.use(Vuex)
 
@@ -40,20 +43,7 @@ export default new Vuex.Store({
     players: {
       namespaced: true,
       state: {
-        players: [
-          {
-            name: 'A'
-          },
-          {
-            name: 'B'
-          },
-          {
-            name: 'C'
-          },
-          {
-            name: 'D'
-          }
-        ]
+        players: JSON.parse(localStorage.players)
       },
       getters: {
         players: state => state.players

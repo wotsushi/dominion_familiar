@@ -1,16 +1,31 @@
 <template>
-  <v-ons-navigator swipeable :page-stack="pageStack" @push-page="pageStack.push($event)" @pop-page="pageStack.pop()">
-  </v-ons-navigator>
+  <v-ons-page>
+    <v-ons-tabbar swipeable position="auto" :tabs="tabs" :visible="true" :index.sync="activeIndex">
+    </v-ons-tabbar>
+  </v-ons-page>
 </template>
 
 <script>
-import pick from './PickPage'
+import game from './GamePage'
+import players from './PlayerPage'
 
 export default {
   name: 'home',
   data () {
     return {
-      pageStack: [pick]
+      activeIndex: 0,
+      tabs: [
+        {
+          icon: 'fa-home',
+          label: 'Home',
+          page: game
+        },
+        {
+          icon: 'fa-users',
+          label: 'Players',
+          page: players
+        }
+      ]
     }
   }
 }
