@@ -1,6 +1,6 @@
 <template>
   <v-ons-page>
-    <v-ons-tabbar swipeable position="auto" :tabs="tabs" :visible="true" :index.sync="activeIndex">
+    <v-ons-tabbar swipeable position="auto" :tabs="tabs" :visible="true" :index.sync="activeIndex" @postchange="saveStorage()">
     </v-ons-tabbar>
   </v-ons-page>
 </template>
@@ -26,6 +26,11 @@ export default {
           page: players
         }
       ]
+    }
+  },
+  methods: {
+    saveStorage () {
+      localStorage.players = JSON.stringify(this.$store.getters['players/players'])
     }
   }
 }

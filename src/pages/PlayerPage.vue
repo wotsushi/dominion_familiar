@@ -12,6 +12,10 @@
     <v-ons-list>
       <v-ons-list-item v-for="player in registeredPlayers" :key="player.name">
         <div class="center">{{ player.name }}</div>
+        <div class="right">
+          <v-ons-switch :input-id="player.name" v-model="player.isParticipated">
+          </v-ons-switch>
+        </div>
       </v-ons-list-item>
     </v-ons-list>
   </v-ons-page>
@@ -38,7 +42,10 @@ export default {
           })
         .then((playerName) => {
           if (playerName) {
-            this.registeredPlayers.push({name: playerName})
+            this.registeredPlayers.push({
+              name: playerName,
+              isParticipated: true
+            })
             localStorage.players = JSON.stringify(this.registeredPlayers)
           }
         })

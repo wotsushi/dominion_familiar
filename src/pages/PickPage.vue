@@ -47,7 +47,10 @@ export default {
         .sampleSize(10)
         .sortBy(['cost'])
         .value()
-      this.players = _.shuffle(this.registeredPlayers)
+      this.players = _(this.registeredPlayers)
+        .filter(registeredPlayer => registeredPlayer.isParticipated)
+        .shuffle()
+        .value()
     },
     configureCardPool () {
       this.$emit('push-page', cardPool)
