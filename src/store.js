@@ -43,10 +43,20 @@ export default new Vuex.Store({
     players: {
       namespaced: true,
       state: {
-        players: JSON.parse(localStorage.players)
+        players: JSON.parse(localStorage.players),
+        shownPlayer: null
       },
       getters: {
-        players: state => state.players
+        players: state => state.players,
+        shownPlayer: state => state.shownPlayer
+      },
+      mutations: {
+        showPlayerDetail (state, player) {
+          state.shownPlayer = player
+        },
+        deletePlayer (state, player) {
+          state.players = state.players.filter((p) => p !== player)
+        }
       }
     }
   }

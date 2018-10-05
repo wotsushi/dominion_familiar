@@ -1,62 +1,20 @@
 <template>
   <v-ons-page>
-    <v-ons-toolbar class="home-toolbar">
-      <div class="center">{{ msg }}</div>
-      <div class="right">
-        <v-ons-toolbar-button @click="registerPlayer()">
-          <v-ons-icon icon="fa-user-plus"></v-ons-icon>
-        </v-ons-toolbar-button>
-      </div>
-    </v-ons-toolbar>
-    <v-ons-list-title>Players</v-ons-list-title>
-    <v-ons-list>
-      <v-ons-list-item v-for="player in registeredPlayers" :key="player.name">
-        <div class="center">{{ player.name }}</div>
-        <div class="right">
-          <v-ons-switch :input-id="player.name" v-model="player.isParticipated">
-          </v-ons-switch>
-        </div>
-      </v-ons-list-item>
-    </v-ons-list>
+    <v-ons-navigator swipeable :page-stack="pageStack" @push-page="pageStack.push($event)" @pop-page="pageStack.pop()">
+    </v-ons-navigator>
   </v-ons-page>
 </template>
 
-
 <script>
+import playerSelect from './PlayerSelectPage'
 
 export default {
-  name: 'player',
+  name: 'playerPage',
   data () {
     return {
-      msg: 'Players'
+      pageStack: [playerSelect]
     }
-  },
-  methods: {
-    registerPlayer () {
-      this.$ons.notification
-        .prompt(
-          'Input the player\'s name',
-          {
-            title: 'Player registration',
-            cancelable: true
-          })
-        .then((playerName) => {
-          if (playerName) {
-            this.registeredPlayers.push({
-              name: playerName,
-              isParticipated: true
-            })
-            localStorage.players = JSON.stringify(this.registeredPlayers)
-          }
-        })
-    }
-  },
-  computed: {
-    registeredPlayers () {
-      return this.$store.getters['players/players']
-    }
-
   }
-
 }
 </script>
+
