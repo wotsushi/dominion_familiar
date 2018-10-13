@@ -17,6 +17,21 @@
         <div class="right">{{ supply.cost }}</div>
       </v-ons-list-item>
     </v-ons-list>
+    <v-ons-list-title>Events</v-ons-list-title>
+    <v-ons-list>
+      <v-ons-list-item v-for="event in supplied_events" :key="event.name">
+        <div class="left">{{ event.name }}</div>
+        <div class="center">{{ event.set }}</div>
+        <div class="right">{{ event.cost }}</div>
+      </v-ons-list-item>
+    </v-ons-list>
+    <v-ons-list-title>Landmarks</v-ons-list-title>
+    <v-ons-list>
+      <v-ons-list-item v-for="landmark in supplied_landmarks" :key="landmark.name">
+        <div class="left">{{ landmark.name }}</div>
+        <div class="center">{{ landmark.set }}</div>
+      </v-ons-list-item>
+    </v-ons-list>
     <v-ons-list-title>Players</v-ons-list-title>
     <v-ons-list>
       <v-ons-list-item v-for="player in players" :key="player.name">
@@ -37,6 +52,8 @@ export default {
     return {
       msg: 'Dominion Familiar',
       supplies: [],
+      supplied_events: [],
+      supplied_landmarks: [],
       players: []
     }
   },
@@ -62,6 +79,12 @@ export default {
     },
     cardsets () {
       return this.$store.getters['cardpool/usedCardsets']
+    },
+    events () {
+      return this.$store.getters['cardpool/events']
+    },
+    landmarks () {
+      return this.$store.getters['cardpool/landmarks']
     },
     registeredPlayers () {
       return this.$store.getters['players/players']

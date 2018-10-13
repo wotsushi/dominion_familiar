@@ -37,7 +37,9 @@ export default new Vuex.Store({
         usedCardsets: state => _(state.cardsets)
           .filter(cardset => cardset.isUsed)
           .map(cardset => cardset.name)
-          .value()
+          .value(),
+        events: state => state.events,
+        landmarks: state => state.landmarks
       }
     },
     players: {
