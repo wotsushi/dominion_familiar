@@ -11,7 +11,7 @@
     <v-ons-button @click="startNewGame()">New Game</v-ons-button>
     <v-ons-list-title>Supplies</v-ons-list-title>
     <v-ons-list>
-      <v-ons-list-item v-for="kingdom in supplied_kingdoms" :key="kingdom.name">
+      <v-ons-list-item v-for="kingdom in suppliedKingdoms" :key="kingdom.name">
         <div class="left">{{ kingdom.name }}</div>
         <div class="center">{{ kingdom.set }}</div>
         <div class="right">{{ kingdom.cost }}</div>
@@ -19,7 +19,7 @@
     </v-ons-list>
     <v-ons-list-title>Events</v-ons-list-title>
     <v-ons-list>
-      <v-ons-list-item v-for="event in supplied_events" :key="event.name">
+      <v-ons-list-item v-for="event in suppliedEvents" :key="event.name">
         <div class="left">{{ event.name }}</div>
         <div class="center">{{ event.set }}</div>
         <div class="right">{{ event.cost }}</div>
@@ -27,7 +27,7 @@
     </v-ons-list>
     <v-ons-list-title>Landmarks</v-ons-list-title>
     <v-ons-list>
-      <v-ons-list-item v-for="landmark in supplied_landmarks" :key="landmark.name">
+      <v-ons-list-item v-for="landmark in suppliedLandmarks" :key="landmark.name">
         <div class="left">{{ landmark.name }}</div>
         <div class="center">{{ landmark.set }}</div>
       </v-ons-list-item>
@@ -51,39 +51,36 @@ export default {
   data () {
     return {
       msg: 'Dominion Familiar',
-      supplied_kingdoms: [],
-      supplied_events: [],
-      supplied_landmarks: [],
+      suppliedKingdoms: [],
+      suppliedEvents: [],
+      suppliedLandmarks: [],
       players: []
     }
   },
   methods: {
     startNewGame () {
-      this.supplied_kingdoms = []
-      this.supplied_events = []
-      this.supplied_landmarks = []
-      let cardpool = _(this.cards)
-        .filter(card => _.includes(this.cardsets, card.set))
+      let suppliedCards = _(this.cards)
+        .filter(({set}) => _.includes(this.cardsets, set))
         .shuffle()
+        .reduce((takenCards, card) => {
+          let {kingdom: numKingdoms = 0, event: numEvents = 0, landmark: numLandmarks = 0} = _.countBy(takenCards, 'type')
+          if (numKingdoms === 10 || ((card.type === 'event' || card.type === 'landmark') && numEvents + numLandmarks === 2)) {
+            return takenCards
+          } else {
+            return _.concat(takenCards, card)
+          }
+        }, [])
+      this.suppliedKingdoms = _(suppliedCards)
+        .filter(({type}) => type === 'kingdom')
+        .sortBy(['cost'])
         .value()
-      while (this.supplied_kingdoms.length < 10) {
-        let card = cardpool.pop()
-        if (card.type === 'kingdom') {
-          this.supplied_kingdoms.push(card)
-        } else if (card.type === 'event' && (this.supplied_events.length + this.supplied_landmarks.length) < 2) {
-          this.supplied_events.push(card)
-        } else if (card.type === 'landmark' && (this.supplied_events.length + this.supplied_landmarks.length) < 2) {
-          this.supplied_landmarks.push(card)
-        }
-      }
-      this.supplied_kingdoms = _.sortBy(this.supplied_kingdoms, ['cost'])
-      this.supplied_events = _.sortBy(this.supplied_events, ['cost'])
-
-      // this.supplies = _(this.cards)
-      //   .filter(card => _.includes(this.cardsets, card.set))
-      //   .sampleSize(10)
-      //   .sortBy(['cost'])
-      //   .value()
+      this.suppliedEvents = _(suppliedCards)
+        .filter(({type}) => type === 'event')
+        .sortBy(['cost'])
+        .value()
+      this.suppliedLandmarks = _(suppliedCards)
+        .filter(({type}) => type === 'landmark')
+        .value()
 
       this.players = _(this.registeredPlayers)
         .filter(registeredPlayer => registeredPlayer.isParticipated)
