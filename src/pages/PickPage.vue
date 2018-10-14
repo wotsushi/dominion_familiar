@@ -11,10 +11,10 @@
     <v-ons-button @click="startNewGame()">New Game</v-ons-button>
     <v-ons-list-title>Supplies</v-ons-list-title>
     <v-ons-list>
-      <v-ons-list-item v-for="supply in supplies" :key="supply.name">
-        <div class="left">{{ supply.name }}</div>
-        <div class="center">{{ supply.set }}</div>
-        <div class="right">{{ supply.cost }}</div>
+      <v-ons-list-item v-for="kingdom in supplied_kingdoms" :key="kingdom.name">
+        <div class="left">{{ kingdom.name }}</div>
+        <div class="center">{{ kingdom.set }}</div>
+        <div class="right">{{ kingdom.cost }}</div>
       </v-ons-list-item>
     </v-ons-list>
     <v-ons-list-title>Events</v-ons-list-title>
@@ -51,7 +51,7 @@ export default {
   data () {
     return {
       msg: 'Dominion Familiar',
-      supplies: [],
+      supplied_kingdoms: [],
       supplied_events: [],
       supplied_landmarks: [],
       players: []
@@ -59,11 +59,32 @@ export default {
   },
   methods: {
     startNewGame () {
-      this.supplies = _(this.cards)
+      this.supplied_kingdoms = []
+      this.supplied_events = []
+      this.supplied_landmarks = []
+      let cardpool = _(this.cards)
         .filter(card => _.includes(this.cardsets, card.set))
-        .sampleSize(10)
-        .sortBy(['cost'])
+        .shuffle()
         .value()
+      while (this.supplied_kingdoms.length < 10) {
+        let card = cardpool.pop()
+        if (card.type === 'kingdom') {
+          this.supplied_kingdoms.push(card)
+        } else if (card.type === 'event' && (this.supplied_events.length + this.supplied_landmarks.length) < 2) {
+          this.supplied_events.push(card)
+        } else if (card.type === 'landmark' && (this.supplied_events.length + this.supplied_landmarks.length) < 2) {
+          this.supplied_landmarks.push(card)
+        }
+      }
+      this.supplied_kingdoms = _.sortBy(this.supplied_kingdoms, ['cost'])
+      this.supplied_events = _.sortBy(this.supplied_events, ['cost'])
+
+      // this.supplies = _(this.cards)
+      //   .filter(card => _.includes(this.cardsets, card.set))
+      //   .sampleSize(10)
+      //   .sortBy(['cost'])
+      //   .value()
+
       this.players = _(this.registeredPlayers)
         .filter(registeredPlayer => registeredPlayer.isParticipated)
         .shuffle()
