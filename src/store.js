@@ -5,20 +5,19 @@ import cards from './assets/cards.json'
 
 if (!localStorage.getItem('cardsets')) {
   localStorage.cardsets = JSON.stringify(
-    _(cards)
-      .map(card => card.set)
-      .uniq()
-      .map(cardset => ({
-        name: cardset,
-        isUsed: true
-      }))
-      .value()
+    _.concat(...cards.cardsets.map(
+      ({name, latestEdition}) => _.range(1, latestEdition + 1)
+        .map(edition => ({
+          name: name,
+          edition: edition,
+          isUsed: true
+        }))
+    ))
   )
 }
 if (!localStorage.getItem('players')) {
   localStorage.players = JSON.stringify([])
 }
-
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -26,7 +25,7 @@ export default new Vuex.Store({
     cardpool: {
       namespaced: true,
       state: {
-        cards: cards,
+        cards: cards.cards,
         cardsets: JSON.parse(localStorage.cardsets)
       },
       mutations: {
@@ -34,10 +33,6 @@ export default new Vuex.Store({
       getters: {
         cards: state => state.cards,
         cardsets: state => state.cardsets,
-        usedCardsets: state => _(state.cardsets)
-          .filter(cardset => cardset.isUsed)
-          .map(cardset => cardset.name)
-          .value(),
         events: state => state.events,
         landmarks: state => state.landmarks
       }

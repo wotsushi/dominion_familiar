@@ -8,9 +8,9 @@
     </v-ons-toolbar>
     <v-ons-list>
       <v-ons-list-title>Cardpool settings</v-ons-list-title>
-      <v-ons-list-item v-for="cardset in cardsets" :key=cardset.name>
+      <v-ons-list-item v-for="cardset in cardsets" :key="`${cardset.name} #${cardset.edition}`">
         <label class="center" :for="cardset.name">
-          {{ cardset.name }}
+          {{ `${cardset.name} ${cardset.edition === 1 ? "" : "#" + cardset.edition}` }}
         </label>
         <div class="right">
           <v-ons-switch :input-id="cardset.name" v-model="cardset.isUsed">

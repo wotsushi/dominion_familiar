@@ -13,7 +13,7 @@
     <v-ons-list>
       <v-ons-list-item v-for="kingdom in suppliedKingdoms" :key="kingdom.name">
         <div class="left">{{ kingdom.name }}</div>
-        <div class="center">{{ kingdom.set }}</div>
+        <div class="center">{{ showCardsets(kingdom) }}</div>
         <div class="right">{{ kingdom.cost }}</div>
       </v-ons-list-item>
     </v-ons-list>
@@ -21,7 +21,7 @@
     <v-ons-list>
       <v-ons-list-item v-for="event in suppliedEvents" :key="event.name">
         <div class="left">{{ event.name }}</div>
-        <div class="center">{{ event.set }}</div>
+        <div class="center">{{ showCardsets(event) }}</div>
         <div class="right">{{ event.cost }}</div>
       </v-ons-list-item>
     </v-ons-list>
@@ -29,7 +29,7 @@
     <v-ons-list>
       <v-ons-list-item v-for="landmark in suppliedLandmarks" :key="landmark.name">
         <div class="left">{{ landmark.name }}</div>
-        <div class="center">{{ landmark.set }}</div>
+        <div class="center">{{ showCardsets(landmark) }}</div>
       </v-ons-list-item>
     </v-ons-list>
     <v-ons-list-title>Players</v-ons-list-title>
@@ -60,7 +60,9 @@ export default {
   methods: {
     startNewGame () {
       let suppliedCards = _(this.cards)
-        .filter(({set}) => _.includes(this.cardsets, set))
+        .filter(({set, editions}) =>
+          this.cardsets.some(({name, edition, isUsed}) =>
+            name === set && editions.includes(edition) && isUsed))
         .shuffle()
         .reduce((takenCards, card) => {
           let {kingdom: numKingdoms = 0, event: numEvents = 0, landmark: numLandmarks = 0} = _.countBy(takenCards, 'type')
@@ -89,6 +91,13 @@ export default {
     },
     configureCardPool () {
       this.$emit('push-page', cardPool)
+    },
+    showCardsets (card) {
+      if (_.isEqual(card.editions, [1])) {
+        return card.set
+      } else {
+        return `${card.set} #${card.editions}`
+      }
     }
   },
   computed: {
@@ -96,7 +105,7 @@ export default {
       return this.$store.getters['cardpool/cards']
     },
     cardsets () {
-      return this.$store.getters['cardpool/usedCardsets']
+      return this.$store.getters['cardpool/cardsets']
     },
     events () {
       return this.$store.getters['cardpool/events']
