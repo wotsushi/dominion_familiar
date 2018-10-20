@@ -16,6 +16,14 @@
         <div class="center">{{ showCardsets(kingdom) }}</div>
         <div class="right">{{ kingdom.cost }}</div>
       </v-ons-list-item>
+    <div v-if="baneSupply">
+      <v-ons-list-header>Bane</v-ons-list-header>
+        <v-ons-list-item>
+          <div class="left">{{ baneSupply.name }}</div>
+          <div class="center">{{ showCardsets(baneSupply) }}</div>
+          <div class="right">{{ baneSupply.cost }}</div>
+        </v-ons-list-item>
+    </div>
     </v-ons-list>
     <v-ons-list-title>Events</v-ons-list-title>
     <v-ons-list>
@@ -54,6 +62,7 @@ export default {
       suppliedKingdoms: [],
       suppliedEvents: [],
       suppliedLandmarks: [],
+      baneSupply: null,
       players: []
     }
   },
@@ -83,6 +92,17 @@ export default {
       this.suppliedLandmarks = _(suppliedCards)
         .filter(({type}) => type === 'landmark')
         .value()
+      if (this.suppliedKingdoms.some(({name}) => name === '魔女娘')) {
+        this.baneSupply = _(this.cards)
+          .filter((card) =>
+            this.cardsets.some(({name, edition, isUsed}) => name === card.set && card.editions.includes(edition) && isUsed) &&
+            card.type === 'kingdom' &&
+            (card.cost.startsWith('2') || card.cost.startsWith('3')) &&
+            !this.suppliedKingdoms.includes(card))
+          .sample()
+      } else {
+        this.baneSupply = null
+      }
 
       this.players = _(this.registeredPlayers)
         .filter(registeredPlayer => registeredPlayer.isParticipated)
