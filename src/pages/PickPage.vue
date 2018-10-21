@@ -82,15 +82,15 @@ export default {
           }
         }, [])
       this.suppliedKingdoms = _(suppliedCards)
-        .filter(({type}) => type === 'kingdom')
+        .filter(['type', 'kingdom'])
         .sortBy(['cost'])
         .value()
       this.suppliedEvents = _(suppliedCards)
-        .filter(({type}) => type === 'event')
+        .filter(['type', 'event'])
         .sortBy(['cost'])
         .value()
       this.suppliedLandmarks = _(suppliedCards)
-        .filter(({type}) => type === 'landmark')
+        .filter(['type', 'landmark'])
         .value()
       if (this.suppliedKingdoms.some(({name}) => name === '魔女娘')) {
         this.baneSupply = _(this.cards)
@@ -105,7 +105,7 @@ export default {
       }
 
       this.players = _(this.registeredPlayers)
-        .filter(registeredPlayer => registeredPlayer.isParticipated)
+        .filter('isParticipated')
         .shuffle()
         .value()
     },
