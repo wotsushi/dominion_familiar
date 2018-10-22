@@ -40,6 +40,12 @@
         <div class="center">{{ showCardsets(landmark) }}</div>
       </v-ons-list-item>
     </v-ons-list>
+    <v-ons-list-title>Options</v-ons-list-title>
+    <v-ons-list>
+      <v-ons-list-item v-for="option in options" :key="option">
+        <div class="left">{{ option }}</div>
+      </v-ons-list-item>
+    </v-ons-list>
     <v-ons-list-title>Players</v-ons-list-title>
     <v-ons-list>
       <v-ons-list-item v-for="player in players" :key="player.name">
@@ -63,6 +69,7 @@ export default {
       suppliedEvents: [],
       suppliedLandmarks: [],
       baneSupply: null,
+      options: [],
       players: []
     }
   },
@@ -103,6 +110,11 @@ export default {
       } else {
         this.baneSupply = null
       }
+      this.options = _.concat(
+        suppliedCards.some(({cost}) => cost.match(/P/)) ? 'ポーション' : [],
+        _.head(suppliedCards).set === '繁栄' ? '植民地・白金貨' : [],
+        _.last(suppliedCards).set === '暗黒時代' ? '共同墓地・草茂る屋敷・納屋' : []
+      )
 
       this.players = _(this.registeredPlayers)
         .filter('isParticipated')
