@@ -3,9 +3,9 @@ import Vuex from 'vuex'
 import _ from 'lodash'
 import cards from './assets/cards.json'
 
-if (!localStorage.getItem('cardsets')) {
-  localStorage.cardsets = JSON.stringify(
-    _.concat(...cards.cardsets.map(
+if (!localStorage.getItem('expansions')) {
+  localStorage.expansions = JSON.stringify(
+    _.concat(...cards.expansions.map(
       ({name, latestEdition}) => _.range(1, latestEdition + 1)
         .map(edition => ({
           name: name,
@@ -26,13 +26,13 @@ export default new Vuex.Store({
       namespaced: true,
       state: {
         cards: cards.cards,
-        cardsets: JSON.parse(localStorage.cardsets)
+        expansions: JSON.parse(localStorage.expansions)
       },
       mutations: {
       },
       getters: {
         cards: state => state.cards,
-        cardsets: state => state.cardsets,
+        expansions: state => state.expansions,
         events: state => state.events,
         landmarks: state => state.landmarks
       }

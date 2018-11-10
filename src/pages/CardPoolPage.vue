@@ -8,12 +8,12 @@
     </v-ons-toolbar>
     <v-ons-list>
       <v-ons-list-title>Cardpool settings</v-ons-list-title>
-      <v-ons-list-item v-for="cardset in cardsets" :key="`${cardset.name} #${cardset.edition}`">
-        <label class="center" :for="cardset.name">
-          {{ `${cardset.name} ${cardset.edition === 1 ? "" : "#" + cardset.edition}` }}
+      <v-ons-list-item v-for="expansion in expansions" :key="`${expansion.name} #${expansion.edition}`">
+        <label class="center" :for="expansion.name">
+          {{ `${expansion.name} ${expansion.edition === 1 ? "" : "#" + expansion.edition}` }}
         </label>
         <div class="right">
-          <v-ons-switch :input-id="cardset.name" v-model="cardset.isUsed">
+          <v-ons-switch :input-id="expansion.name" v-model="expansion.isUsed">
           </v-ons-switch>
         </div>
       </v-ons-list-item>
@@ -32,13 +32,13 @@ export default {
   },
   methods: {
     pop () {
-      localStorage.cardsets = JSON.stringify(this.cardsets)
+      localStorage.expansions = JSON.stringify(this.expansions)
       this.$emit('pop-page')
     }
   },
   computed: {
-    cardsets () {
-      return this.$store.getters['cardpool/cardsets']
+    expansions () {
+      return this.$store.getters['cardpool/expansions']
     }
   }
 }
