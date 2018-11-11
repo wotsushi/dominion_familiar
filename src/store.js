@@ -3,22 +3,21 @@ import Vuex from 'vuex'
 import _ from 'lodash'
 import cards from './assets/cards.json'
 
-if (!localStorage.getItem('cardsets')) {
-  localStorage.cardsets = JSON.stringify(
-    _(cards)
-      .map(card => card.set)
-      .uniq()
-      .map(cardset => ({
-        name: cardset,
-        isUsed: true
-      }))
-      .value()
+if (!localStorage.getItem('expansions')) {
+  localStorage.expansions = JSON.stringify(
+    _.concat(...cards.expansions.map(
+      ({name, latestEdition}) => _.range(1, latestEdition + 1)
+        .map(edition => ({
+          name: name,
+          edition: edition,
+          isUsed: true
+        }))
+    ))
   )
 }
 if (!localStorage.getItem('players')) {
   localStorage.players = JSON.stringify([])
 }
-
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -26,18 +25,14 @@ export default new Vuex.Store({
     cardpool: {
       namespaced: true,
       state: {
-        cards: cards,
-        cardsets: JSON.parse(localStorage.cardsets)
+        cards: cards.cards,
+        expansions: JSON.parse(localStorage.expansions)
       },
       mutations: {
       },
       getters: {
         cards: state => state.cards,
-        cardsets: state => state.cardsets,
-        usedCardsets: state => _(state.cardsets)
-          .filter(cardset => cardset.isUsed)
-          .map(cardset => cardset.name)
-          .value(),
+        expansions: state => state.expansions,
         events: state => state.events,
         landmarks: state => state.landmarks
       }
